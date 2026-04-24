@@ -5,327 +5,530 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Journal">
-<meta name="theme-color" content="#1a1614">
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%231a1614'/><text x='90' y='128' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='120' fill='%23d4956b'>J</text></svg>">
-<title>Journal</title>
+<meta name="apple-mobile-web-app-title" content="Kladd">
+<meta name="theme-color" content="#f7f5f0">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%232d4a3e'/><text x='90' y='128' text-anchor='middle' font-family='Georgia,serif' font-size='100' fill='%23f7f5f0'>K</text></svg>">
+<title>Kladd</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #1a1614;
-    --bg-elevated: #221d1a;
-    --ink: #f4ead5;
-    --ink-muted: #9a8f7f;
-    --ink-dim: #5c5247;
-    --accent: #d4956b;
-    --accent-glow: rgba(212, 149, 107, 0.35);
-    --danger: #c97070;
-    --border: rgba(244, 234, 213, 0.08);
-    --border-strong: rgba(244, 234, 213, 0.15);
+    --bg: #f7f5f0;
+    --bg-elevated: #ffffff;
+    --bg-subtle: #eeeae0;
+    --ink: #1a1f1c;
+    --ink-soft: #3d4540;
+    --ink-muted: #6b7369;
+    --ink-dim: #9ca399;
+    --accent: #2d4a3e;
+    --accent-soft: #e6ede8;
+    --warn: #a85a2a;
+    --warn-soft: #faeede;
+    --danger: #8b2f2f;
+    --border: #dfdbd1;
+    --border-strong: #c8c3b5;
   }
-
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  html, body {
-    min-height: 100%;
-    overflow-x: hidden;
-  }
-
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { min-height: 100%; overflow-x: hidden; }
   body {
     background: var(--bg);
-    background-image:
-      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212, 149, 107, 0.08), transparent 60%),
-      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(60, 40, 30, 0.4), transparent 60%);
     color: var(--ink);
-    font-family: 'Fraunces', Georgia, serif;
-    font-weight: 300;
+    font-family: 'Inter', -apple-system, sans-serif;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     overscroll-behavior-y: contain;
     -webkit-font-smoothing: antialiased;
   }
-
   #app {
-    min-height: 100vh;
-    min-height: 100dvh;
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 24px 24px 48px;
-    display: flex;
-    flex-direction: column;
+    min-height: 100vh; min-height: 100dvh;
+    max-width: 640px; margin: 0 auto;
+    padding: 16px 20px 32px;
+    display: flex; flex-direction: column;
   }
 
+  /* ---------- header ---------- */
   header {
-    text-align: center;
-    padding: 24px 0 16px;
+    padding: 16px 4px 12px;
+    display: flex; align-items: flex-end; justify-content: space-between;
   }
-
-  h1 {
-    font-family: 'Instrument Serif', serif;
-    font-size: 56px;
-    font-weight: 400;
-    font-style: italic;
-    letter-spacing: -0.03em;
-    line-height: 1;
+  .title-block h1 {
+    font-family: 'Newsreader', serif;
+    font-size: 34px; font-weight: 500;
+    letter-spacing: -0.02em; line-height: 1;
     color: var(--ink);
   }
-
-  .date-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-dim);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-top: 14px;
+  .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; color: var(--ink-muted);
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .count-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--ink-muted);
+    letter-spacing: 0.1em;
+    background: var(--bg-subtle);
+    padding: 6px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
   }
 
-  .record-zone {
+  /* ---------- warning banner ---------- */
+  .warning-banner {
+    background: var(--warn-soft);
+    border: 1px solid #e8d4b8;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 12px 0 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .warning-banner svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--warn); margin-top: 1px; }
+  .warning-banner p {
+    font-size: 12px; line-height: 1.45;
+    color: #5a3818;
+  }
+  .warning-banner strong { font-weight: 600; }
+
+  /* ---------- new draft section ---------- */
+  .new-section {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(26, 31, 28, 0.03);
+  }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-muted);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .template-btn {
+    background: var(--bg-subtle);
+    border: 1px solid transparent;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 13px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 40px 0 32px;
+    gap: 3px;
+    transition: all 0.15s;
   }
-
-  #transcript {
-    min-height: 80px;
-    max-height: 180px;
-    overflow-y: auto;
-    padding: 0 8px;
-    margin-bottom: 36px;
+  .template-btn:active { transform: scale(0.98); background: var(--accent-soft); }
+  .template-btn .t-name { font-weight: 600; color: var(--ink); }
+  .template-btn .t-desc {
+    font-size: 10px;
     color: var(--ink-muted);
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
-    font-size: 22px;
-    line-height: 1.5;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    width: 100%;
-    letter-spacing: -0.01em;
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.02em;
   }
-
-  #transcript.active {
-    opacity: 1;
-    color: var(--ink);
-  }
-
-  #record-btn {
-    width: 128px;
-    height: 128px;
-    border-radius: 50%;
-    border: 1px solid var(--border-strong);
-    background: var(--bg-elevated);
-    color: var(--ink);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(244, 234, 213, 0.04);
-  }
-
-  #record-btn:active {
-    transform: scale(0.95);
-  }
-
-  #record-btn.listening {
+  .quick-btn {
+    grid-column: span 2;
     background: var(--accent);
     color: var(--bg);
-    border-color: var(--accent);
-    animation: pulse 1.8s ease-out infinite;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 4px;
+    letter-spacing: 0.01em;
   }
+  .quick-btn:active { transform: scale(0.98); }
 
-  @keyframes pulse {
-    0%   { box-shadow: 0 0 0 0 var(--accent-glow), 0 12px 40px rgba(0,0,0,0.5); }
-    70%  { box-shadow: 0 0 0 40px transparent, 0 12px 40px rgba(0,0,0,0.5); }
-    100% { box-shadow: 0 0 0 0 transparent, 0 12px 40px rgba(0,0,0,0.5); }
+  /* ---------- entries list ---------- */
+  .entries-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 4px 12px;
   }
-
-  #record-btn svg {
-    width: 42px;
-    height: 42px;
+  .entries-header h2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 500;
+    color: var(--ink-muted);
+    letter-spacing: 0.18em; text-transform: uppercase;
   }
-
-  #status {
-    margin-top: 28px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--ink-dim);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    text-align: center;
-    min-height: 14px;
-    transition: color 0.3s;
+  #entries { padding-bottom: 16px; }
+  .entry {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    overflow: hidden;
   }
-
-  #status.active { color: var(--accent); }
-
-  .entries-heading {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 400;
-    color: var(--ink-dim);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin: 24px 4px 8px;
-    display: flex;
-    align-items: center;
+  .entry-head {
+    padding: 14px 16px;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
     gap: 12px;
   }
-
-  .entries-heading::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
+  .entry-head-left { flex: 1; min-width: 0; }
+  .entry-meta {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
   }
-
-  #entries { padding-bottom: 24px; }
-
-  .entry {
-    padding: 22px 4px;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.2s;
+  .entry-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
   }
-
-  .entry:last-child { border-bottom: none; }
-
   .entry-date {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+  .entry-title {
+    font-size: 14px; font-weight: 500;
+    color: var(--ink);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .chevron {
     color: var(--ink-dim);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .entry.expanded .chevron { transform: rotate(90deg); }
+
+  .entry-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .entry.expanded .entry-body { display: block; }
+  .entry-field {
+    margin-top: 14px;
+  }
+  .entry-field-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-muted);
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
-
-  .entry-text {
-    font-family: 'Fraunces', serif;
-    font-size: 17px;
-    line-height: 1.6;
-    color: var(--ink);
-    font-weight: 300;
-    letter-spacing: 0.005em;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+  .entry-field-value {
+    font-family: 'Newsreader', serif;
+    font-size: 15px; line-height: 1.55;
+    color: var(--ink-soft);
+    white-space: pre-wrap; word-wrap: break-word;
   }
-
-  .entry.expanded .entry-text {
-    -webkit-line-clamp: unset;
-    display: block;
+  .entry-field-value:empty::before {
+    content: '—';
+    color: var(--ink-dim);
+    font-style: italic;
   }
-
-  .entry-actions {
-    display: none;
-    margin-top: 16px;
-    gap: 10px;
-  }
-
-  .entry.expanded .entry-actions { display: flex; }
-
-  .entry-btn {
-    background: transparent;
-    border: 1px solid var(--border-strong);
-    color: var(--ink-muted);
-    font-family: 'JetBrains Mono', monospace;
+  .expiry-note {
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 9px 16px;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s;
+    color: var(--warn);
+    margin-top: 14px;
+    padding: 8px 10px;
+    background: var(--warn-soft);
+    border-radius: 6px;
   }
-
-  .entry-btn:active { transform: scale(0.96); }
-  .entry-btn.danger { color: var(--danger); border-color: rgba(201, 112, 112, 0.3); }
+  .entry-actions {
+    display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;
+  }
+  .entry-btn {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .entry-btn:active { transform: scale(0.97); }
+  .entry-btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .entry-btn.danger { color: var(--danger); border-color: #e4cccc; background: #f9f0f0; }
 
   .empty {
-    text-align: center;
-    padding: 48px 20px;
-    color: var(--ink-dim);
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
-    font-size: 18px;
-    line-height: 1.6;
-  }
-
-  footer {
-    margin-top: auto;
-    padding-top: 48px;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .footer-btn {
-    background: transparent;
-    border: 1px solid var(--border);
+    text-align: center; padding: 32px 20px;
     color: var(--ink-muted);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 11px 20px;
-    border-radius: 100px;
-    cursor: pointer;
-    transition: all 0.2s;
+    font-family: 'Newsreader', serif;
+    font-style: italic; font-size: 15px;
+    background: var(--bg-elevated);
+    border: 1px dashed var(--border);
+    border-radius: 14px;
   }
 
+  /* ---------- footer ---------- */
+  footer { margin-top: auto; padding-top: 28px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .footer-btn {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--ink-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 10px 16px; border-radius: 100px; cursor: pointer;
+    font-weight: 500;
+  }
   .footer-btn:active { transform: scale(0.97); }
-  .footer-btn:hover { border-color: var(--border-strong); color: var(--ink); }
 
-  #record-btn[disabled] {
-    opacity: 0.4;
-    cursor: not-allowed;
+  /* ---------- editor modal ---------- */
+  #editor-overlay {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  }
+  #editor-overlay.visible { display: flex; }
+
+  .editor-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+  }
+  .editor-bar button {
+    background: transparent; border: none;
+    color: var(--ink-soft);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 500;
+    padding: 6px 4px; cursor: pointer;
+  }
+  .editor-bar button.primary { color: var(--accent); font-weight: 600; }
+  .editor-bar button:disabled { opacity: 0.35; }
+  .editor-bar .editor-title {
+    font-family: 'Newsreader', serif;
+    font-size: 16px; font-weight: 500;
+    color: var(--ink);
+  }
+
+  .editor-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px 40px;
+  }
+
+  .pii-warning {
+    background: #fde8e8;
+    border: 1px solid #f4c6c6;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    display: none;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .pii-warning.visible { display: flex; }
+  .pii-warning svg { flex-shrink: 0; width: 16px; height: 16px; color: var(--danger); margin-top: 1px; }
+  .pii-warning p { font-size: 12px; line-height: 1.4; color: #5a2020; }
+  .pii-warning strong { font-weight: 600; }
+
+  .field-group { margin-bottom: 18px; }
+  .field-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .field-hint { text-transform: none; letter-spacing: 0; font-size: 10px; color: var(--ink-dim); font-family: 'Inter', sans-serif; }
+  .field-input, .field-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .field-input:focus, .field-textarea:focus { border-color: var(--accent); }
+  .field-textarea {
+    font-family: 'Newsreader', serif;
+    font-size: 16px;
+    line-height: 1.55;
+    resize: vertical;
+    min-height: 90px;
+  }
+  .field-textarea.main { min-height: 140px; }
+
+  .dictation-hint {
+    margin-top: 6px;
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-style: italic;
+    font-family: 'Newsreader', serif;
   }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <h1>Journal</h1>
-    <p class="date-label" id="today-date"></p>
+    <div class="title-block">
+      <h1>Kladd</h1>
+      <div class="subtitle" id="today-date"></div>
+    </div>
+    <div class="count-badge" id="count-badge">0</div>
   </header>
 
-  <section class="record-zone">
-    <div id="transcript"></div>
-    <button id="record-btn" aria-label="Spela in anteckning"></button>
-    <p id="status">Tryck för att börja</p>
+  <div class="warning-banner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 9v4M12 17h.01"/>
+      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+    </svg>
+    <p><strong>Endast pseudonymer.</strong> Skriv aldrig namn, personnummer eller identifierande detaljer. Använd "A", "B", "Klient 1" etc. För över till verksamhetssystemet och radera.</p>
+  </div>
+
+  <section class="new-section">
+    <div class="section-label">Ny anteckning</div>
+    <div class="template-grid">
+      <button class="template-btn" data-template="hembesök">
+        <span class="t-name">Hembesök</span>
+        <span class="t-desc">Miljö · samtal · bedömning</span>
+      </button>
+      <button class="template-btn" data-template="telefon">
+        <span class="t-name">Telefonkontakt</span>
+        <span class="t-desc">Inkommande · utgående</span>
+      </button>
+      <button class="template-btn" data-template="möte">
+        <span class="t-name">Möte</span>
+        <span class="t-desc">Deltagare · innehåll · beslut</span>
+      </button>
+      <button class="template-btn" data-template="observation">
+        <span class="t-name">Observation</span>
+        <span class="t-desc">Iakttagelse · bedömning</span>
+      </button>
+      <button class="quick-btn" data-template="löpande">
+        + Löpande anteckning
+      </button>
+    </div>
   </section>
 
+  <div class="entries-header">
+    <h2>Sparade utkast</h2>
+  </div>
   <section id="entries"></section>
 
   <footer>
-    <button class="footer-btn" id="export-btn">Exportera</button>
+    <button class="footer-btn" id="export-btn">Exportera alla</button>
+    <button class="footer-btn" id="clear-all-btn">Rensa alla</button>
   </footer>
+</div>
+
+<!-- Editor -->
+<div id="editor-overlay">
+  <div class="editor-bar">
+    <button id="cancel-btn">Avbryt</button>
+    <span class="editor-title" id="editor-title">Ny anteckning</span>
+    <button class="primary" id="save-btn">Spara</button>
+  </div>
+  <div class="editor-content">
+    <div class="pii-warning" id="pii-warning">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 8v4M12 16h.01"/>
+      </svg>
+      <p><strong id="pii-text">Möjliga personuppgifter upptäckta.</strong> Kontrollera att du inte skrivit namn eller personnummer.</p>
+    </div>
+
+    <div id="editor-fields"></div>
+  </div>
 </div>
 
 <script>
 (() => {
-  const STORAGE_KEY = 'journal-entries-v1';
+  const STORAGE_KEY = 'kladd-entries-v1';
   const MONTHS = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+  const EXPIRY_DAYS = 7;
+
+  // ---------- templates ----------
+  const TEMPLATES = {
+    hembesök: {
+      name: 'Hembesök',
+      fields: [
+        { key: 'klientkod', label: 'Klientkod', type: 'input', hint: 'T.ex. A, B, Klient 1', placeholder: 'Endast pseudonym' },
+        { key: 'plats', label: 'Plats/miljö', type: 'textarea', placeholder: 'Bostadens skick, miljö, närvarande personer...' },
+        { key: 'samtal', label: 'Samtal/innehåll', type: 'textarea', main: true, placeholder: 'Vad diskuterades, klientens uttryck, observationer...' },
+        { key: 'bedömning', label: 'Bedömning', type: 'textarea', placeholder: 'Din professionella bedömning' },
+        { key: 'åtgärd', label: 'Åtgärd/planering', type: 'textarea', placeholder: 'Vad ska hända härnäst' },
+      ]
+    },
+    telefon: {
+      name: 'Telefonkontakt',
+      fields: [
+        { key: 'klientkod', label: 'Klientkod', type: 'input', hint: 'T.ex. A, B, Klient 1', placeholder: 'Endast pseudonym' },
+        { key: 'riktning', label: 'Inkommande/utgående', type: 'input', placeholder: 'Inkommande el. utgående' },
+        { key: 'innehåll', label: 'Samtalsinnehåll', type: 'textarea', main: true, placeholder: 'Vad diskuterades...' },
+        { key: 'åtgärd', label: 'Åtgärd', type: 'textarea', placeholder: 'Vad överenskoms, nästa steg' },
+      ]
+    },
+    möte: {
+      name: 'Möte',
+      fields: [
+        { key: 'klientkod', label: 'Klientkod', type: 'input', hint: 'T.ex. A, B, Klient 1', placeholder: 'Endast pseudonym' },
+        { key: 'mötestyp', label: 'Typ av möte', type: 'input', placeholder: 'T.ex. planeringsmöte, SIP, uppföljning' },
+        { key: 'deltagare', label: 'Deltagare', type: 'textarea', placeholder: 'Roller, ej namn – t.ex. "klient, handläggare, skola"' },
+        { key: 'innehåll', label: 'Innehåll', type: 'textarea', main: true, placeholder: 'Vad diskuterades, viktiga punkter...' },
+        { key: 'beslut', label: 'Beslut/överenskommelser', type: 'textarea', placeholder: 'Vad beslutades' },
+      ]
+    },
+    observation: {
+      name: 'Observation',
+      fields: [
+        { key: 'klientkod', label: 'Klientkod', type: 'input', hint: 'T.ex. A, B, Klient 1', placeholder: 'Endast pseudonym' },
+        { key: 'iakttagelse', label: 'Iakttagelse', type: 'textarea', main: true, placeholder: 'Vad observerades, beteende, tecken...' },
+        { key: 'sammanhang', label: 'Sammanhang', type: 'textarea', placeholder: 'Var, när, under vilka omständigheter' },
+        { key: 'bedömning', label: 'Bedömning', type: 'textarea', placeholder: 'Din tolkning/bedömning' },
+      ]
+    },
+    löpande: {
+      name: 'Löpande anteckning',
+      fields: [
+        { key: 'klientkod', label: 'Klientkod', type: 'input', hint: 'T.ex. A, B, Klient 1', placeholder: 'Endast pseudonym' },
+        { key: 'rubrik', label: 'Rubrik', type: 'input', placeholder: 'Kort beskrivning' },
+        { key: 'text', label: 'Text', type: 'textarea', main: true, placeholder: 'Fri text – tryck 🎤 på tangentbordet för att diktera' },
+      ]
+    }
+  };
 
   const el = {
-    recordBtn: document.getElementById('record-btn'),
-    transcript: document.getElementById('transcript'),
-    status: document.getElementById('status'),
     entries: document.getElementById('entries'),
+    countBadge: document.getElementById('count-badge'),
     exportBtn: document.getElementById('export-btn'),
+    clearAllBtn: document.getElementById('clear-all-btn'),
     todayDate: document.getElementById('today-date'),
+    overlay: document.getElementById('editor-overlay'),
+    editorTitle: document.getElementById('editor-title'),
+    editorFields: document.getElementById('editor-fields'),
+    saveBtn: document.getElementById('save-btn'),
+    cancelBtn: document.getElementById('cancel-btn'),
+    piiWarning: document.getElementById('pii-warning'),
+    piiText: document.getElementById('pii-text'),
   };
 
   // ---------- date helpers ----------
@@ -336,20 +539,25 @@
   function formatEntryDate(ts) {
     const d = new Date(ts);
     const pad = n => String(n).padStart(2, '0');
-    return `${d.getDate()} ${MONTHS[d.getMonth()]} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    return `${d.getDate()} ${MONTHS[d.getMonth()]} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   }
+  function daysSince(ts) { return Math.floor((Date.now() - ts) / 86400000); }
+  function daysUntilExpiry(ts) { return Math.max(0, EXPIRY_DAYS - daysSince(ts)); }
 
   // ---------- storage ----------
-  function loadEntries() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-    catch { return []; }
-  }
-  function saveEntries(entries) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-  }
-  function addEntry(text) {
+  const loadEntries = () => {
+    try {
+      const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      // Auto-purge expired
+      const kept = all.filter(e => daysSince(e.timestamp) < EXPIRY_DAYS);
+      if (kept.length !== all.length) localStorage.setItem(STORAGE_KEY, JSON.stringify(kept));
+      return kept;
+    } catch { return []; }
+  };
+  const saveEntries = e => localStorage.setItem(STORAGE_KEY, JSON.stringify(e));
+  function addEntry(entry) {
     const entries = loadEntries();
-    entries.unshift({ id: Date.now().toString(), text: text.trim(), timestamp: Date.now() });
+    entries.unshift({ id: Date.now().toString(), ...entry, timestamp: Date.now() });
     saveEntries(entries);
     renderEntries();
   }
@@ -358,158 +566,244 @@
     renderEntries();
   }
 
-  // ---------- rendering ----------
-  function escapeHtml(s) {
-    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-  function renderEntries() {
-    const entries = loadEntries();
-    if (entries.length === 0) {
-      el.entries.innerHTML = '<p class="empty">Inga anteckningar än.<br>Tryck på knappen ovan för att börja.</p>';
-      return;
+  // ---------- PII detection ----------
+  // Swedish personnummer: YYMMDD-XXXX or YYYYMMDD-XXXX
+  const PERSONNUMMER_RE = /(?:\b|^)(\d{2})?\d{6}[-+]?\d{4}(?:\b|$)/;
+  // Common Swedish first names (short list — just for gentle warning)
+  const COMMON_NAMES = ['anna','maria','karin','sara','lena','eva','kerstin','margareta','elisabeth','birgitta','erik','lars','anders','johan','mikael','per','karl','nils','olof','peter','stefan','daniel','david','andreas','oskar','emma','alice','olivia','wilma','astrid','hugo','liam','lucas','william','noah','elias'];
+  function detectPII(text) {
+    if (!text) return null;
+    const lower = text.toLowerCase();
+    if (PERSONNUMMER_RE.test(text)) return 'Ett personnummer verkar finnas i texten.';
+    // Look for capitalized word followed by capitalized word (crude full-name check)
+    if (/\b[A-ZÅÄÖ][a-zåäö]{2,}\s+[A-ZÅÄÖ][a-zåäö]{2,}/.test(text)) {
+      return 'Text som ser ut som ett för- och efternamn upptäcktes.';
     }
-    el.entries.innerHTML = `
-      <h2 class="entries-heading">Tidigare · ${entries.length}</h2>
-      ${entries.map(e => `
-        <article class="entry" data-id="${e.id}">
-          <div class="entry-date">${formatEntryDate(e.timestamp)}</div>
-          <div class="entry-text">${escapeHtml(e.text)}</div>
-          <div class="entry-actions">
-            <button class="entry-btn danger" data-action="delete" data-id="${e.id}">Radera</button>
-          </div>
-        </article>
-      `).join('')}
-    `;
+    // Common first name check
+    for (const name of COMMON_NAMES) {
+      const re = new RegExp(`\\b${name}\\b`, 'i');
+      if (re.test(lower)) return `Möjligt förnamn upptäckt ("${name}"). Använd hellre pseudonym.`;
+    }
+    return null;
   }
 
-  el.entries.addEventListener('click', (ev) => {
-    const delBtn = ev.target.closest('[data-action="delete"]');
-    if (delBtn) {
+  // ---------- render entries ----------
+  const escapeHtml = s => (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function renderEntries() {
+    const entries = loadEntries();
+    el.countBadge.textContent = entries.length;
+    if (entries.length === 0) {
+      el.entries.innerHTML = '<div class="empty">Inga utkast just nu.</div>';
+      return;
+    }
+    el.entries.innerHTML = entries.map(e => {
+      const tmpl = TEMPLATES[e.template] || TEMPLATES.löpande;
+      const titleField = e.data.rubrik || e.data.klientkod || '—';
+      const daysLeft = daysUntilExpiry(e.timestamp);
+      const fieldsHtml = tmpl.fields.map(f => `
+        <div class="entry-field">
+          <div class="entry-field-label">${escapeHtml(f.label)}</div>
+          <div class="entry-field-value">${escapeHtml(e.data[f.key] || '')}</div>
+        </div>
+      `).join('');
+      return `
+        <article class="entry" data-id="${e.id}">
+          <div class="entry-head">
+            <div class="entry-head-left">
+              <div class="entry-meta">
+                <span class="entry-type">${escapeHtml(tmpl.name)}</span>
+                <span class="entry-date">${formatEntryDate(e.timestamp)}</span>
+              </div>
+              <div class="entry-title">${escapeHtml(titleField)}</div>
+            </div>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+          <div class="entry-body">
+            ${fieldsHtml}
+            <div class="expiry-note">Raderas automatiskt om ${daysLeft} ${daysLeft === 1 ? 'dag' : 'dagar'}</div>
+            <div class="entry-actions">
+              <button class="entry-btn primary" data-action="copy" data-id="${e.id}">Kopiera text</button>
+              <button class="entry-btn" data-action="done" data-id="${e.id}">Överförd – radera</button>
+              <button class="entry-btn danger" data-action="delete" data-id="${e.id}">Radera</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  function entryAsText(entry) {
+    const tmpl = TEMPLATES[entry.template] || TEMPLATES.löpande;
+    const lines = [`${tmpl.name} — ${formatEntryDate(entry.timestamp)}`, ''];
+    for (const f of tmpl.fields) {
+      const val = entry.data[f.key];
+      if (val && val.trim()) {
+        lines.push(`${f.label}:`);
+        lines.push(val);
+        lines.push('');
+      }
+    }
+    return lines.join('\n').trim();
+  }
+
+  el.entries.addEventListener('click', async (ev) => {
+    const actionBtn = ev.target.closest('[data-action]');
+    if (actionBtn) {
       ev.stopPropagation();
-      if (confirm('Radera denna anteckning?')) deleteEntry(delBtn.dataset.id);
+      const id = actionBtn.dataset.id;
+      const entries = loadEntries();
+      const entry = entries.find(e => e.id === id);
+      if (!entry) return;
+      if (actionBtn.dataset.action === 'delete') {
+        if (confirm('Radera detta utkast?')) deleteEntry(id);
+      } else if (actionBtn.dataset.action === 'done') {
+        if (confirm('Markera som överförd och radera?')) deleteEntry(id);
+      } else if (actionBtn.dataset.action === 'copy') {
+        const text = entryAsText(entry);
+        try {
+          await navigator.clipboard.writeText(text);
+          actionBtn.textContent = 'Kopierat ✓';
+          setTimeout(() => { actionBtn.textContent = 'Kopiera text'; }, 1600);
+        } catch {
+          // Fallback: select text in a temporary textarea
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); actionBtn.textContent = 'Kopierat ✓'; }
+          catch { alert('Kunde inte kopiera. Markera manuellt.'); }
+          ta.remove();
+          setTimeout(() => { actionBtn.textContent = 'Kopiera text'; }, 1600);
+        }
+      }
       return;
     }
     const entry = ev.target.closest('.entry');
     if (entry) entry.classList.toggle('expanded');
   });
 
-  // ---------- icons ----------
-  const MIC_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z"/><path d="M19 12a7 7 0 01-14 0"/><path d="M12 19v3"/></svg>`;
-  const STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>`;
-  function setIcon() {
-    el.recordBtn.innerHTML = isListening ? STOP_ICON : MIC_ICON;
+  // ---------- editor ----------
+  let currentTemplate = null;
+
+  function openEditor(templateKey) {
+    currentTemplate = templateKey;
+    const tmpl = TEMPLATES[templateKey];
+    el.editorTitle.textContent = tmpl.name;
+    el.piiWarning.classList.remove('visible');
+    el.editorFields.innerHTML = tmpl.fields.map(f => {
+      if (f.type === 'input') {
+        return `
+          <div class="field-group">
+            <div class="field-label">
+              <span>${escapeHtml(f.label)}</span>
+              ${f.hint ? `<span class="field-hint">${escapeHtml(f.hint)}</span>` : ''}
+            </div>
+            <input class="field-input" type="text" name="${f.key}" placeholder="${escapeHtml(f.placeholder || '')}" autocapitalize="sentences" autocorrect="on">
+          </div>
+        `;
+      }
+      return `
+        <div class="field-group">
+          <div class="field-label">
+            <span>${escapeHtml(f.label)}</span>
+            ${f.hint ? `<span class="field-hint">${escapeHtml(f.hint)}</span>` : ''}
+          </div>
+          <textarea class="field-textarea ${f.main ? 'main' : ''}" name="${f.key}" placeholder="${escapeHtml(f.placeholder || '')}" autocapitalize="sentences" autocorrect="on" spellcheck="true"></textarea>
+          ${f.main ? '<div class="dictation-hint">Tryck 🎤 på tangentbordet för att diktera</div>' : ''}
+        </div>
+      `;
+    }).join('');
+
+    // Wire up PII detection on inputs
+    const inputs = el.editorFields.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+      input.addEventListener('input', checkPII);
+    });
+
+    el.overlay.classList.add('visible');
+    setTimeout(() => {
+      const firstInput = el.editorFields.querySelector('input, textarea');
+      if (firstInput) firstInput.focus();
+    }, 100);
   }
 
-  // ---------- speech ----------
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recognition = null;
-  let isListening = false;
-  let finalText = '';
-  let interimText = '';
-
-  if (!SR) {
-    el.recordBtn.disabled = true;
-    el.status.textContent = 'Taligenkänning stöds inte';
-  } else {
-    recognition = new SR();
-    recognition.lang = 'sv-SE';
-    recognition.continuous = true;
-    recognition.interimResults = true;
-
-    recognition.onresult = (event) => {
-      interimText = '';
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const r = event.results[i];
-        if (r.isFinal) finalText += r[0].transcript + ' ';
-        else interimText += r[0].transcript;
-      }
-      const display = (finalText + interimText).trim();
-      el.transcript.textContent = display || '…';
-      el.transcript.classList.add('active');
-    };
-
-    recognition.onend = () => {
-      if (isListening) {
-        try { recognition.start(); } catch {}
-      }
-    };
-
-    recognition.onerror = (event) => {
-      if (event.error === 'no-speech' || event.error === 'aborted') return;
-      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-        el.status.textContent = 'Mikrofon nekad · se inställningar';
-        stopListening(true);
-      } else {
-        console.warn('Speech error:', event.error);
-      }
-    };
-  }
-
-  function startListening() {
-    if (!recognition) return;
-    finalText = '';
-    interimText = '';
-    el.transcript.textContent = '…';
-    el.transcript.classList.add('active');
-    isListening = true;
-    el.recordBtn.classList.add('listening');
-    el.status.classList.add('active');
-    el.status.textContent = 'Lyssnar · tryck för att stoppa';
-    setIcon();
-    try { recognition.start(); } catch {}
-  }
-
-  function stopListening(silent = false) {
-    isListening = false;
-    el.recordBtn.classList.remove('listening');
-    el.status.classList.remove('active');
-    try { recognition && recognition.stop(); } catch {}
-    const text = (finalText + interimText).trim();
-    if (text && !silent) {
-      addEntry(text);
-      el.status.textContent = 'Sparat';
-    } else if (!silent) {
-      el.status.textContent = 'Inget att spara';
+  function checkPII() {
+    const inputs = el.editorFields.querySelectorAll('input, textarea');
+    let warning = null;
+    inputs.forEach(input => {
+      if (warning) return;
+      const found = detectPII(input.value);
+      if (found) warning = found;
+    });
+    if (warning) {
+      el.piiText.textContent = warning;
+      el.piiWarning.classList.add('visible');
+    } else {
+      el.piiWarning.classList.remove('visible');
     }
-    setTimeout(() => {
-      if (!isListening) el.status.textContent = 'Tryck för att börja';
-    }, 2200);
-    setTimeout(() => {
-      el.transcript.classList.remove('active');
-      setTimeout(() => { if (!isListening) el.transcript.textContent = ''; }, 400);
-    }, 600);
-    setIcon();
   }
 
-  el.recordBtn.addEventListener('click', () => {
-    if (isListening) stopListening();
-    else startListening();
+  function closeEditor() {
+    el.overlay.classList.remove('visible');
+    currentTemplate = null;
+  }
+
+  function collectFields() {
+    const data = {};
+    const inputs = el.editorFields.querySelectorAll('input, textarea');
+    inputs.forEach(input => { data[input.name] = input.value.trim(); });
+    return data;
+  }
+
+  function hasAnyContent(data) {
+    return Object.values(data).some(v => v && v.trim());
+  }
+
+  document.querySelectorAll('[data-template]').forEach(btn => {
+    btn.addEventListener('click', () => openEditor(btn.dataset.template));
+  });
+
+  el.cancelBtn.addEventListener('click', () => {
+    const data = collectFields();
+    if (hasAnyContent(data) && !confirm('Kasta anteckningen?')) return;
+    closeEditor();
+  });
+
+  el.saveBtn.addEventListener('click', () => {
+    const data = collectFields();
+    if (!hasAnyContent(data)) { closeEditor(); return; }
+    addEntry({ template: currentTemplate, data });
+    closeEditor();
   });
 
   // ---------- export ----------
   el.exportBtn.addEventListener('click', () => {
     const entries = loadEntries();
-    if (entries.length === 0) {
-      alert('Inga anteckningar att exportera.');
-      return;
-    }
-    const text = entries
-      .map(e => `${formatEntryDate(e.timestamp)}\n${e.text}\n`)
-      .join('\n—\n\n');
+    if (entries.length === 0) { alert('Inga utkast att exportera.'); return; }
+    const text = entries.map(entryAsText).join('\n\n———\n\n');
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `journal-${new Date().toISOString().slice(0,10)}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    a.download = `kladd-${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
+  });
+
+  el.clearAllBtn.addEventListener('click', () => {
+    const entries = loadEntries();
+    if (entries.length === 0) { alert('Inget att rensa.'); return; }
+    if (confirm(`Radera alla ${entries.length} utkast? Kan inte ångras.`)) {
+      saveEntries([]);
+      renderEntries();
+    }
   });
 
   // ---------- init ----------
   el.todayDate.textContent = formatToday();
-  setIcon();
   renderEntries();
 })();
 </script>
