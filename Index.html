@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Journal">
+<meta name="theme-color" content="#1a1614">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%231a1614'/><text x='90' y='128' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='120' fill='%23d4956b'>J</text></svg>">
+<title>Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1614;
+    --bg-elevated: #221d1a;
+    --ink: #f4ead5;
+    --ink-muted: #9a8f7f;
+    --ink-dim: #5c5247;
+    --accent: #d4956b;
+    --accent-glow: rgba(212, 149, 107, 0.35);
+    --danger: #c97070;
+    --border: rgba(244, 234, 213, 0.08);
+    --border-strong: rgba(244, 234, 213, 0.15);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html, body {
+    min-height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212, 149, 107, 0.08), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(60, 40, 30, 0.4), transparent 60%);
+    color: var(--ink);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 300;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overscroll-behavior-y: contain;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #app {
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 24px 24px 48px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    text-align: center;
+    padding: 24px 0 16px;
+  }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 56px;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .date-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 14px;
+  }
+
+  .record-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 0 32px;
+  }
+
+  #transcript {
+    min-height: 80px;
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 0 8px;
+    margin-bottom: 36px;
+    color: var(--ink-muted);
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.5;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    width: 100%;
+    letter-spacing: -0.01em;
+  }
+
+  #transcript.active {
+    opacity: 1;
+    color: var(--ink);
+  }
+
+  #record-btn {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    background: var(--bg-elevated);
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(244, 234, 213, 0.04);
+  }
+
+  #record-btn:active {
+    transform: scale(0.95);
+  }
+
+  #record-btn.listening {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    animation: pulse 1.8s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 var(--accent-glow), 0 12px 40px rgba(0,0,0,0.5); }
+    70%  { box-shadow: 0 0 0 40px transparent, 0 12px 40px rgba(0,0,0,0.5); }
+    100% { box-shadow: 0 0 0 0 transparent, 0 12px 40px rgba(0,0,0,0.5); }
+  }
+
+  #record-btn svg {
+    width: 42px;
+    height: 42px;
+  }
+
+  #status {
+    margin-top: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-align: center;
+    min-height: 14px;
+    transition: color 0.3s;
+  }
+
+  #status.active { color: var(--accent); }
+
+  .entries-heading {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--ink-dim);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin: 24px 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .entries-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  #entries { padding-bottom: 24px; }
+
+  .entry {
+    padding: 22px 4px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .entry:last-child { border-bottom: none; }
+
+  .entry-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .entry-text {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink);
+    font-weight: 300;
+    letter-spacing: 0.005em;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .entry.expanded .entry-text {
+    -webkit-line-clamp: unset;
+    display: block;
+  }
+
+  .entry-actions {
+    display: none;
+    margin-top: 16px;
+    gap: 10px;
+  }
+
+  .entry.expanded .entry-actions { display: flex; }
+
+  .entry-btn {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--ink-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .entry-btn:active { transform: scale(0.96); }
+  .entry-btn.danger { color: var(--danger); border-color: rgba(201, 112, 112, 0.3); }
+
+  .empty {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--ink-dim);
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  footer {
+    margin-top: auto;
+    padding-top: 48px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .footer-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 11px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .footer-btn:active { transform: scale(0.97); }
+  .footer-btn:hover { border-color: var(--border-strong); color: var(--ink); }
+
+  #record-btn[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>Journal</h1>
+    <p class="date-label" id="today-date"></p>
+  </header>
+
+  <section class="record-zone">
+    <div id="transcript"></div>
+    <button id="record-btn" aria-label="Spela in anteckning"></button>
+    <p id="status">Tryck för att börja</p>
+  </section>
+
+  <section id="entries"></section>
+
+  <footer>
+    <button class="footer-btn" id="export-btn">Exportera</button>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const STORAGE_KEY = 'journal-entries-v1';
+  const MONTHS = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+
+  const el = {
+    recordBtn: document.getElementById('record-btn'),
+    transcript: document.getElementById('transcript'),
+    status: document.getElementById('status'),
+    entries: document.getElementById('entries'),
+    exportBtn: document.getElementById('export-btn'),
+    todayDate: document.getElementById('today-date'),
+  };
+
+  // ---------- date helpers ----------
+  function formatToday() {
+    const d = new Date();
+    return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  }
+  function formatEntryDate(ts) {
+    const d = new Date(ts);
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getDate()} ${MONTHS[d.getMonth()]} · ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  // ---------- storage ----------
+  function loadEntries() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function saveEntries(entries) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  }
+  function addEntry(text) {
+    const entries = loadEntries();
+    entries.unshift({ id: Date.now().toString(), text: text.trim(), timestamp: Date.now() });
+    saveEntries(entries);
+    renderEntries();
+  }
+  function deleteEntry(id) {
+    saveEntries(loadEntries().filter(e => e.id !== id));
+    renderEntries();
+  }
+
+  // ---------- rendering ----------
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function renderEntries() {
+    const entries = loadEntries();
+    if (entries.length === 0) {
+      el.entries.innerHTML = '<p class="empty">Inga anteckningar än.<br>Tryck på knappen ovan för att börja.</p>';
+      return;
+    }
+    el.entries.innerHTML = `
+      <h2 class="entries-heading">Tidigare · ${entries.length}</h2>
+      ${entries.map(e => `
+        <article class="entry" data-id="${e.id}">
+          <div class="entry-date">${formatEntryDate(e.timestamp)}</div>
+          <div class="entry-text">${escapeHtml(e.text)}</div>
+          <div class="entry-actions">
+            <button class="entry-btn danger" data-action="delete" data-id="${e.id}">Radera</button>
+          </div>
+        </article>
+      `).join('')}
+    `;
+  }
+
+  el.entries.addEventListener('click', (ev) => {
+    const delBtn = ev.target.closest('[data-action="delete"]');
+    if (delBtn) {
+      ev.stopPropagation();
+      if (confirm('Radera denna anteckning?')) deleteEntry(delBtn.dataset.id);
+      return;
+    }
+    const entry = ev.target.closest('.entry');
+    if (entry) entry.classList.toggle('expanded');
+  });
+
+  // ---------- icons ----------
+  const MIC_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 003-3V6a3 3 0 10-6 0v6a3 3 0 003 3z"/><path d="M19 12a7 7 0 01-14 0"/><path d="M12 19v3"/></svg>`;
+  const STOP_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>`;
+  function setIcon() {
+    el.recordBtn.innerHTML = isListening ? STOP_ICON : MIC_ICON;
+  }
+
+  // ---------- speech ----------
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let isListening = false;
+  let finalText = '';
+  let interimText = '';
+
+  if (!SR) {
+    el.recordBtn.disabled = true;
+    el.status.textContent = 'Taligenkänning stöds inte';
+  } else {
+    recognition = new SR();
+    recognition.lang = 'sv-SE';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+      interimText = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const r = event.results[i];
+        if (r.isFinal) finalText += r[0].transcript + ' ';
+        else interimText += r[0].transcript;
+      }
+      const display = (finalText + interimText).trim();
+      el.transcript.textContent = display || '…';
+      el.transcript.classList.add('active');
+    };
+
+    recognition.onend = () => {
+      if (isListening) {
+        try { recognition.start(); } catch {}
+      }
+    };
+
+    recognition.onerror = (event) => {
+      if (event.error === 'no-speech' || event.error === 'aborted') return;
+      if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+        el.status.textContent = 'Mikrofon nekad · se inställningar';
+        stopListening(true);
+      } else {
+        console.warn('Speech error:', event.error);
+      }
+    };
+  }
+
+  function startListening() {
+    if (!recognition) return;
+    finalText = '';
+    interimText = '';
+    el.transcript.textContent = '…';
+    el.transcript.classList.add('active');
+    isListening = true;
+    el.recordBtn.classList.add('listening');
+    el.status.classList.add('active');
+    el.status.textContent = 'Lyssnar · tryck för att stoppa';
+    setIcon();
+    try { recognition.start(); } catch {}
+  }
+
+  function stopListening(silent = false) {
+    isListening = false;
+    el.recordBtn.classList.remove('listening');
+    el.status.classList.remove('active');
+    try { recognition && recognition.stop(); } catch {}
+    const text = (finalText + interimText).trim();
+    if (text && !silent) {
+      addEntry(text);
+      el.status.textContent = 'Sparat';
+    } else if (!silent) {
+      el.status.textContent = 'Inget att spara';
+    }
+    setTimeout(() => {
+      if (!isListening) el.status.textContent = 'Tryck för att börja';
+    }, 2200);
+    setTimeout(() => {
+      el.transcript.classList.remove('active');
+      setTimeout(() => { if (!isListening) el.transcript.textContent = ''; }, 400);
+    }, 600);
+    setIcon();
+  }
+
+  el.recordBtn.addEventListener('click', () => {
+    if (isListening) stopListening();
+    else startListening();
+  });
+
+  // ---------- export ----------
+  el.exportBtn.addEventListener('click', () => {
+    const entries = loadEntries();
+    if (entries.length === 0) {
+      alert('Inga anteckningar att exportera.');
+      return;
+    }
+    const text = entries
+      .map(e => `${formatEntryDate(e.timestamp)}\n${e.text}\n`)
+      .join('\n—\n\n');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `journal-${new Date().toISOString().slice(0,10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------- init ----------
+  el.todayDate.textContent = formatToday();
+  setIcon();
+  renderEntries();
+})();
+</script>
+</body>
+</html>
